@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GameGeve | Игровой Telegram канал</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --neon-blue: #0ff0fc;
+            --neon-pink: #ff00ff;
+            --neon-green: #00ff00;
+            --neon-purple: #bf00ff;
+            --dark-bg: #0a0a16;
+        }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: #fff;
+            line-height: 1.6;
+            overflow-x: hidden;
+            position: relative;
+        }
+        
+        /* RGB эффекты */
+        .rgb-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, 
+                rgba(255, 0, 255, 0.05) 0%, 
+                rgba(0, 255, 255, 0.05) 50%, 
+                rgba(255, 255, 0, 0.05) 100%);
+            pointer-events: none;
+            z-index: -1;
+            animation: rgbShift 8s infinite linear;
+        }
+        
+        @keyframes rgbShift {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        header {
+            padding: 20px 0;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+        
+        .logo {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue), var(--neon-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+            animation: glow 2s infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(255, 255, 255, 0.3); }
+            to { text-shadow: 0 0 20px rgba(255, 255, 255, 0.6), 0 0 30px rgba(255, 255, 255, 0.4); }
+        }
+        
+        .tagline {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+            color: var(--neon-blue);
+        }
+        
+        .hero {
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            color: white;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .cta-button:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-pink));
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+        }
+        
+        .cta-button:hover:before {
+            opacity: 1;
+        }
+        
+        .features {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            color: var(--neon-green);
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .feature-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .feature-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--neon-pink), var(--neon-blue));
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+        }
+        
+        .feature-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            color: var(--neon-pink);
+        }
+        
+        .games {
+            padding: 80px 0;
+            position: relative;
+            z-index: 5;
+        }
+        
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .game-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .game-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
+        
+        .game-img {
+            height: 180px;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+        
+        .game-info {
+            padding: 20px;
+        }
+        
+        .game-info h3 {
+            margin-bottom: 10px;
+            color: var(--neon-green);
+        }
+        
+        .testimonials {
+            padding: 80px 0;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .testimonial-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+        }
+        
+        .testimonial-card:before {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            left: 15px;
+            font-size: 4rem;
+            color: var(--neon-pink);
+            opacity: 0.3;
+        }
+        
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+        }
+        
+        .author-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        
+        .final-cta {
+            padding: 100px 0;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .final-cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--neon-blue);
+        }
+        
+        .final-cta p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 30px;
+            opacity: 0.9;
+        }
+        
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .social-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .social-link:hover {
+            background: linear-gradient(45deg, var(--neon-pink), var(--neon-blue));
+            transform: translateY(-5px);
+        }
+        
+        footer {
+            padding: 30px 0;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.5);
+            position: relative;
+            z-index: 5;
+        }
+        
+        .floating-elements {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-element {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        @keyframes float {
+            0% {
+                transform: translateY(0) translateX(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+            
+            .hero p {
+                font-size: 1.1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+            
+            .logo {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="rgb-overlay"></div>
+    
+    <div class="floating-elements" id="floatingElements"></div>
+    
+    <header>
+        <div class="container">
+            <div class="logo">GAMEGEVE</div>
+            <p class="tagline">Лучший игровой контент в Telegram. Обзоры, гайды, новости и многое другое!</p>
+        </div>
+    </header>
+    
+    <section class="hero">
+        <div class="container">
+            <h1>Погрузись в мир игр с нами!</h1>
+            <p>Ежедневные обновления, эксклюзивные гайды, свежие новости игровой индустрии и многое другое только в нашем Telegram канале.</p>
+            <a href="https://t.me/gamegeve" class="cta-button" target="_blank">
+                <i class="fab fa-telegram"></i> Подписаться на GameGeve
+            </a>
+        </div>
+    </section>
+    
+    <section class="features">
+        <div class="container">
+            <h2 class="section-title">Что тебя ждет?</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-gamepad"></i></div>
+                    <h3>Обзоры игр</h3>
+                    <p>Честные и подробные обзоры новинок игровой индустрии</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <h3>Гайды и советы</h3>
+                    <p>Полезные гайды, которые помогут пройти сложные уровни</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon"><i class="fas fa-newspaper"></i></div>
+                    <h3>Новости индустрии</h3>
+                    <p>Самые свежие новости из мира игр, которые нельзя пропустить</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="games">
+        <div class="container">
+            <h2 class="section-title">Популярные игры в канале</h2>
+            <div class="games-grid">
+                <div class="game-card">
+                    <div class="game-img">
+                        <i class="fab fa-fort-awesome"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3>Fortnite</h3>
+                        <p>Стратегии, новости обновлений и секреты игры</p>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-img">
+                        <i class="fas fa-ghost"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3>VALORANT</h3>
+                        <p>Тактики, гайды на агентов и разборы карт</p>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-img">
+                        <i class="fas fa-car-crash"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3>GTA V</h3>
+                        <p>Секреты, моды и прохождение миссий</p>
+                    </div>
+                </div>
+                <div class="game-card">
+                    <div class="game-img">
+                        <i class="fas fa-dragon"></i>
+                    </div>
+                    <div class="game-info">
+                        <h3>Elden Ring</h3>
+                        <p>Прохождение, советы по битвам с боссами</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="testimonials">
+        <div class="container">
+            <h2 class="section-title">Что говорят геймеры</h2>
+            <div class="testimonials-grid">
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Благодаря гайдам из этого канала наконец-то прошел Elden Ring! Ребята, вы лучшие!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">А</div>
+                        <div>
+                            <strong>Алексей</strong>
+                            <p>Геймер</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Каждый день нахожу что-то полезное. Новости всегда свежие, а обзоры честные. Рекомендую!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">М</div>
+                        <div>
+                            <strong>Мария</strong>
+                            <p>Стример</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card">
+                    <p class="testimonial-text">"Сначала подписался из интереса, теперь не представляю как жил без этого канала. Отличный контент!"</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">Д</div>
+                        <div>
+                            <strong>Дмитрий</strong>
+                            <p>Киберспортсмен</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="final-cta">
+        <div class="container">
+            <h2>Стань частью нашего геймерского комьюнити!</h2>
+            <p>Уже более 10,000 геймеров подписались на канал и получают лучший игровой контент. Присоединяйся!</p>
+            <a href="https://t.me/gamegeve" class="cta-button" target="_blank">
+                <i class="fab fa-telegram"></i> Подписаться на GameGeve
+            </a>
+            
+            <div class="social-links">
+                <a href="#" class="social-link"><i class="fab fa-vk"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-youtube"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-discord"></i></a>
+                <a href="#" class="social-link"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p>© 2023 GameGeve | Игровой Telegram канал. Все права защищены.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Создание плавающих элементов
+        document.addEventListener('DOMContentLoaded', function() {
+            const floatingContainer = document.getElementById('floatingElements');
+            const colors = ['rgba(255, 0, 255, 0.3)', 'rgba(0, 255, 255, 0.3)', 'rgba(0, 255, 0, 0.3)'];
+            
+            for (let i = 0; i < 15; i++) {
+                const element = document.createElement('div');
+                element.classList.add('floating-element');
+                
+                // Случайный размер
+                const size = Math.random() * 30 + 10;
+                element.style.width = `${size}px`;
+                element.style.height = `${size}px`;
+                
+                // Случайный цвет
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                element.style.background = color;
+                
+                // Случайная позиция и анимация
+                element.style.left = `${Math.random() * 100}vw`;
+                element.style.animationDelay = `${Math.random() * 15}s`;
+                element.style.animationDuration = `${15 + Math.random() * 10}s`;
+                
+                floatingContainer.appendChild(element);
+            }
+        });
+    </script>
+</body>
+</html>
